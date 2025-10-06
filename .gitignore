@@ -2,6 +2,10 @@
 /outputs
 /wandb
 
+# Custom metrics setup - verl modifications are handled via submodule ignore
+# The verl submodule has ignore=dirty set in .gitmodules
+*.original
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
