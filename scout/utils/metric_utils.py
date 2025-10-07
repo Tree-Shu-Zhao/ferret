@@ -126,15 +126,7 @@ def _extract_custom_metrics(batch: DataProto) -> dict[str, Any]:
 
             # Compute statistics
             if values.numel() > 0:
-                # Basic statistics
-                custom_metrics[f"custom/{key}/mean"] = values.mean().item()
-                custom_metrics[f"custom/{key}/max"] = values.max().item()
-                custom_metrics[f"custom/{key}/min"] = values.min().item()
-
-                # For binary metrics (values are all 0 or 1), compute rate
-                unique_vals = torch.unique(values)
-                if len(unique_vals) <= 2 and all(v in [0, 1] for v in unique_vals):
-                    custom_metrics[f"custom/{key}/rate"] = values.mean().item()
+                custom_metrics[f"custom/{key}"] = values.mean().item()
 
         except (ValueError, TypeError, RuntimeError):
             # Skip values that can't be converted to numeric tensors

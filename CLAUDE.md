@@ -125,3 +125,4 @@ Main dependencies (from `pyproject.toml`):
 1. You MUST NOT modify the verl folder since the scout codebase would like to seamlessly integrate with the latest verl.
 2. You are ONLY ALLOWED to create new files if necessary. Try to reuse infra in verl.
 3. You MUST NOT create any documentations like markdown files.
+4. If you need to run test, please use the virtual environment in .venv

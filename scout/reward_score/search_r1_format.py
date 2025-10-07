@@ -47,16 +47,21 @@ def em_check(prediction, golden_answers):
 
 
 def is_valid_sequence(text):
-    # Note: solution_str may or may not contain <|im_start|>assistant marker
-    # Try to find it, but if not present, use the whole text
-    assistant_pattern = r"<\|im_start\|>assistant\s*"
-    assistant_match = re.search(assistant_pattern, text)
+    # Remove role tags (user/assistant) that may appear between structured tags
+    content = text
 
-    if assistant_match:
-        start_pos = assistant_match.end()
-        content = text[start_pos:]
-    else:
-        content = text
+    # First pass: Simply remove lines that contain only role tags
+    lines = content.split('\n')
+    cleaned_lines = []
+    for line in lines:
+        stripped = line.strip()
+        # Only skip lines that are exactly "user" or "assistant"
+        if stripped not in ['user', 'assistant']:
+            cleaned_lines.append(line)
+
+    # Rejoin the lines
+    content = '\n'.join(cleaned_lines)
+
 
     # Check for balanced tags - now using think, tool_call, tool_response, answer
     tags_to_check = ["think", "tool_call", "tool_response", "answer"]
@@ -73,7 +78,7 @@ def is_valid_sequence(text):
     parts = re.split(split_pattern, content)
 
     # 2. Keep track of the current position in the expected sequence
-    # start -> <think> -> <tool_call> -> <tool_response> -> [<think> -> <tool_call> -> <tool_response>]* -> <answer> -> end
+    # start -> [<think> -> <tool_call> -> <tool_response>]* -> <think> -> <answer> -> end
     state = "start"
 
     # 3. Check each part
@@ -221,11 +226,8 @@ def compute_score_em(solution_str, ground_truth, data_source, extra_info, struct
         "score": final_reward,  # Required: the actual reward value
         # Additional metrics (automatically collected by the wrapper)
         "format_valid": 1.0 if is_valid_format else 0.0,
-        "retrieval_correct": 1.0 if retrieval_correct else 0.0,
         "has_answer": 1.0 if answer is not None else 0.0,
         "answer_correct": 1.0 if answer_correct else 0.0,
         "num_tool_calls": float(num_tool_calls),
-        "reward_structure": structure_format_score if is_valid_format else 0.0,
-        "reward_retrieval": retrieval_score if retrieval_correct and is_valid_format else 0.0,
         "reward_final": final_reward,
     }
