@@ -16,28 +16,20 @@
 import argparse
 import logging
 import os
-import tempfile
+import sys
 
+import datasets
 import pandas as pd
-from huggingface_hub import hf_hub_download
-from huggingface_hub.utils import EntryNotFoundError
 
+from scout.data.templates import get_template, list_templates
 from verl.utils.hdfs_io import copy, makedirs
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-# Configuration constants
-DEFAULT_SYSTEM_CONTENT = "You are Qwen, created by Alibaba Cloud. You are a helpful assistant."
-DEFAULT_USER_CONTENT_PREFIX = f"""Answer the given question. \
-You must conduct reasoning inside <think> and </think> first every time you get new information. \
-After reasoning, if you find you lack some knowledge, you can call a search engine by <tool_call> query </tool_call> and it will return the top searched results between <tool_response> and </tool_response>. \
-You can search as many times as your want. \
-If you find no further external knowledge needed, you can directly provide the answer inside <answer> and </answer>, without detailed illustrations. For example, <answer> Beijing </answer>. Question: """
 
-
-def process_single_row(row, current_split_name, row_index):
+def process_single_row(row, current_split_name, row_index, system_content, user_content_prefix):
     """
     Process a single row of data for SearchR1-like format.
 
@@ -45,22 +37,27 @@ def process_single_row(row, current_split_name, row_index):
         row: DataFrame row containing the original data
         current_split_name: Name of the current split (train/test)
         row_index: Index of the row in the DataFrame
+        system_content: System message content
+        user_content_prefix: User message prefix before the question
 
     Returns:
         pd.Series: Processed row data in the required format
     """
-    question = row.get("question", "")
+    question = row.get("question", "").strip()
 
     # Build prompt structure
     user_content = user_content_prefix.rstrip("\n") + question
     prompt = [{"role": "system", "content": system_content}, {"role": "user", "content": user_content}]
 
-    # Extract ground truth from reward_model or fallback to golden_answers
-    reward_model_data = row.get("reward_model")
-    if isinstance(reward_model_data, dict) and "ground_truth" in reward_model_data:
-        ground_truth = reward_model_data.get("ground_truth")
-    else:
-        ground_truth = row.get("golden_answers", [])
+    # Extract ground truth from golden_answers (FlashRAG format)
+    golden_answers = row.get("golden_answers", [])
+    ground_truth = {"target": golden_answers}
+
+    # Create reward_model structure
+    reward_model_data = {
+        "style": "rule",
+        "ground_truth": ground_truth
+    }
 
     # Process data source
     data_source_tagged = "searchR1_" + str(row.get("data_source", ""))
@@ -72,6 +69,17 @@ def process_single_row(row, current_split_name, row_index):
         }
     }
 
+    # Extract question type for ParallelSearch reward function
+    # Check metadata first, then row-level type field, default to "na"
+    metadata = row.get("metadata")
+    if metadata and isinstance(metadata, dict) and "type" in metadata:
+        query_type = metadata.get("type")
+    elif "type" in row:
+        query_type = row.get("type")
+    else:
+        # Default to "na" if type is not found
+        query_type = "na"
+
     # Build complete extra_info structure
     extra_info = {
         "index": row_index,
@@ -79,13 +87,14 @@ def process_single_row(row, current_split_name, row_index):
         "question": question,
         "split": current_split_name,
         "tools_kwargs": tools_kwargs,
+        "type": query_type,
     }
 
     return pd.Series(
         {
             "data_source": data_source_tagged,
             "prompt": prompt,
-            "ability": row.get("ability"),
+            "ability": "fact-reasoning",
             "reward_model": reward_model_data,
             "extra_info": extra_info,
             "metadata": row.get("metadata"),
@@ -97,50 +106,91 @@ def main():
     local_save_dir = os.path.expanduser(args.local_dir)
     os.makedirs(local_save_dir, exist_ok=True)
 
-    processed_files = []
+    # Load template or use direct overrides
+    if args.system_content or args.user_content_prefix:
+        # Use direct content overrides if provided
+        if not args.system_content or not args.user_content_prefix:
+            logger.error("Both --system_content and --user_content_prefix must be provided when using direct overrides")
+            sys.exit(1)
+        system_content = args.system_content
+        user_content_prefix = args.user_content_prefix
+        logger.info("Using directly provided system and user content")
+    else:
+        # Load template
+        try:
+            template = get_template(args.template)
+            system_content = template.system_content
+            user_content_prefix = template.user_content_prefix
+            logger.info(f"Using template: {args.template} - {template.description}")
+        except KeyError as e:
+            logger.error(str(e))
+            sys.exit(1)
 
-    # Download and process files using temporary directory
-    with tempfile.TemporaryDirectory() as tmp_download_dir:
-        for split in ["train", "test"]:
-            parquet_filename = f"{split}.parquet"
-            logger.info(f"Processing {split} split...")
+    # Process train and test datasets
+    data_sources_train = args.train_data_sources.split(',') if args.train_data_sources else []
+    data_sources_test = args.test_data_sources.split(',') if args.test_data_sources else []
 
+    for split, data_sources in [("train", data_sources_train), ("test", data_sources_test)]:
+        if not data_sources:
+            logger.warning(f"No data sources specified for {split} split, skipping...")
+            continue
+
+        logger.info(f"Processing {split} split with data sources: {data_sources}")
+        all_datasets = []
+
+        for data_source in data_sources:
             try:
-                # Download Parquet file from HuggingFace
-                logger.info(f"Downloading {parquet_filename} from {args.hf_repo_id}")
-                local_parquet_filepath = hf_hub_download(
-                    repo_id=args.hf_repo_id,
-                    filename=parquet_filename,
-                    repo_type="dataset",
-                    local_dir=tmp_download_dir,
-                    local_dir_use_symlinks=False,
-                )
+                logger.info(f"Loading {data_source} from RUC-NLPIR/FlashRAG_datasets...")
+                dataset = datasets.load_dataset('RUC-NLPIR/FlashRAG_datasets', data_source)
 
-                # Load and process Parquet file
-                df_raw = pd.read_parquet(local_parquet_filepath)
-                logger.info(f"Loaded {len(df_raw)} rows from {parquet_filename}")
+                # Select appropriate split
+                if split == "train":
+                    if 'train' in dataset:
+                        source_dataset = dataset['train']
+                    else:
+                        logger.warning(f"No train split for {data_source}, skipping...")
+                        continue
+                else:  # test
+                    if 'test' in dataset:
+                        source_dataset = dataset['test']
+                    elif 'dev' in dataset:
+                        logger.info(f"Using dev split for {data_source}")
+                        source_dataset = dataset['dev']
+                    else:
+                        logger.warning(f"No test/dev split for {data_source}, skipping...")
+                        continue
 
-                def apply_process_row(row, split_name=split):
-                    return process_single_row(row, current_split_name=split_name, row_index=row.name)
+                # Convert to pandas DataFrame for processing
+                df_raw = source_dataset.to_pandas()
+                df_raw['data_source'] = data_source  # Add data_source column
+
+                logger.info(f"Loaded {len(df_raw)} rows from {data_source}")
+
+                # Process each row
+                def apply_process_row(row):
+                    return process_single_row(
+                        row,
+                        current_split_name=split,
+                        row_index=row.name,
+                        system_content=system_content,
+                        user_content_prefix=user_content_prefix,
+                    )
 
                 df_processed = df_raw.apply(apply_process_row, axis=1)
+                all_datasets.append(df_processed)
 
-                # Save processed DataFrame
-                output_file_path = os.path.join(local_save_dir, f"{split}.parquet")
-                df_processed.to_parquet(output_file_path, index=False)
-                logger.info(f"Saved {len(df_processed)} processed rows to {output_file_path}")
-                processed_files.append(output_file_path)
-
-            except EntryNotFoundError:
-                logger.warning(f"{parquet_filename} not found in repository {args.hf_repo_id}")
             except Exception as e:
-                logger.error(f"Error processing {split} split: {e}")
+                logger.error(f"Error loading {data_source}: {e}")
+                continue
 
-    if not processed_files:
-        logger.warning("No data was processed or saved")
-        return
-
-    logger.info(f"Successfully processed {len(processed_files)} files to {local_save_dir}")
+        if all_datasets:
+            # Concatenate all datasets for this split
+            combined_df = pd.concat(all_datasets, ignore_index=True)
+            output_file_path = os.path.join(local_save_dir, f"{split}.parquet")
+            combined_df.to_parquet(output_file_path, index=False)
+            logger.info(f"Saved {len(combined_df)} processed rows to {output_file_path}")
+        else:
+            logger.warning(f"No datasets processed for {split} split")
 
     # Copy to HDFS if specified
     if args.hdfs_dir:
@@ -153,21 +203,51 @@ def main():
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Download Search-R1 from HuggingFace, process, and save to Parquet.")
+    parser = argparse.ArgumentParser(
+        description="Download and process QA datasets from RUC-NLPIR/FlashRAG_datasets to Search-R1 format.",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
     parser.add_argument(
-        "--hf_repo_id", default="PeterJinGo/nq_hotpotqa_train", help="HuggingFace dataset repository ID."
+        "--train_data_sources",
+        default="nq,hotpotqa",
+        help="Comma-separated list of data sources for training (e.g., 'nq,hotpotqa')",
+    )
+    parser.add_argument(
+        "--test_data_sources",
+        default="nq,triviaqa,popqa,hotpotqa,2wikimultihopqa,musique,bamboogle",
+        help="Comma-separated list of data sources for testing",
     )
     parser.add_argument(
         "--local_dir",
-        default="~/data/searchR1_processed_direct",
+        default="~/data/searchR1_processed",
         help="Local directory to save the processed Parquet files.",
     )
     parser.add_argument("--hdfs_dir", default=None, help="Optional HDFS directory to copy the Parquet files to.")
 
+    # Template configuration
+    parser.add_argument(
+        "--template",
+        default="search_r1",
+        help="Prompt template to use (default: search_r1). Use --list_templates to see available templates.",
+    )
+    parser.add_argument(
+        "--list_templates", action="store_true", help="List all available prompt templates and exit."
+    )
+
+    # Direct content overrides (optional, overrides template selection)
+    parser.add_argument("--system_content", default=None, help="Override system message content directly.")
+    parser.add_argument("--user_content_prefix", default=None, help="Override user message prefix directly.")
+
     args = parser.parse_args()
 
-    # System and user content configuration
-    system_content = DEFAULT_SYSTEM_CONTENT
-    user_content_prefix = DEFAULT_USER_CONTENT_PREFIX
+    # Handle --list_templates
+    if args.list_templates:
+        templates = list_templates()
+        print("Available prompt templates:")
+        print("-" * 80)
+        for name, description in templates.items():
+            print(f"  {name:20s} - {description}")
+        print("-" * 80)
+        sys.exit(0)
 
     main()
