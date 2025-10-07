@@ -227,7 +227,7 @@ def compute_score_em(solution_str, ground_truth, data_source, extra_info, struct
         # Additional metrics (automatically collected by the wrapper)
         "format_valid": 1.0 if is_valid_format else 0.0,
         "has_answer": 1.0 if answer is not None else 0.0,
-        "answer_correct": 1.0 if answer_correct else 0.0,
+        "acc": 1.0 if answer_correct else 0.0,
         "num_tool_calls": float(num_tool_calls),
         "reward_final": final_reward,
     }
