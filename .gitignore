@@ -1,6 +1,7 @@
 /data
 /outputs
 /wandb
+/checkpoints
 
 # Custom metrics setup - verl modifications are handled via submodule ignore
 # The verl submodule has ignore=dirty set in .gitmodules
