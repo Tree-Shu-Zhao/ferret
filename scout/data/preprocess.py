@@ -45,7 +45,7 @@ def process_single_row(row, current_split_name, row_index, system_content, user_
     }
 
     # Process data source
-    data_source_tagged = prompt_template + "_" + str(row.get("data_source", ""))
+    data_source_tagged = str(row.get("data_source", ""))
 
     # Build tools kwargs structure
     tools_kwargs = {
