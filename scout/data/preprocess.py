@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 
-def process_single_row(row, current_split_name, row_index, system_content, user_content_prefix):
+def process_single_row(row, current_split_name, row_index, system_content, user_content_prefix, prompt_template):
     """
     Process a single row of data for SearchR1-like format.
 
@@ -45,7 +45,7 @@ def process_single_row(row, current_split_name, row_index, system_content, user_
     }
 
     # Process data source
-    data_source_tagged = "searchR1_" + str(row.get("data_source", ""))
+    data_source_tagged = prompt_template + "_" + str(row.get("data_source", ""))
 
     # Build tools kwargs structure
     tools_kwargs = {
@@ -159,6 +159,7 @@ def main():
                         row_index=row.name,
                         system_content=system_content,
                         user_content_prefix=user_content_prefix,
+                        prompt_template=args.template,
                     )
 
                 df_processed = df_raw.apply(apply_process_row, axis=1)
@@ -171,7 +172,7 @@ def main():
         if all_datasets:
             # Concatenate all datasets for this split
             combined_df = pd.concat(all_datasets, ignore_index=True)
-            output_file_path = os.path.join(local_save_dir, f"{split}.parquet")
+            output_file_path = os.path.join(local_save_dir, f"{args.template}_{split}.parquet")
             combined_df.to_parquet(output_file_path, index=False)
             logger.info(f"Saved {len(combined_df)} processed rows to {output_file_path}")
         else:

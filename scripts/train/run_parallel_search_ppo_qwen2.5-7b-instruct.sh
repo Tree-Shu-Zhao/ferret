@@ -33,6 +33,6 @@ python3 -m verl.trainer.main_ppo \
     critic.model.path=$BASE_MODEL \
     trainer.project_name=$PROJECT_NAME \
     trainer.experiment_name=$EXPERIMENT_NAME \
-    data.train_files="$DATA_DIR/train.parquet" \
-    data.val_files="$DATA_DIR/test.parquet"  \
+    data.train_files="$DATA_DIR/parallel_search_train.parquet" \
+    data.val_files="$DATA_DIR/parallel_search_test.parquet"  \
     actor_rollout_ref.rollout.multi_turn.tool_config_path="$TOOL_CONFIG" $@
