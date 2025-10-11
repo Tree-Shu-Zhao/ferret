@@ -9,8 +9,7 @@ import pandas as pd
 from scout.data.templates import get_template, list_templates
 from verl.utils.hdfs_io import copy, makedirs
 
-# Setup logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+# Logger will be configured in main()
 logger = logging.getLogger(__name__)
 
 
@@ -88,8 +87,20 @@ def process_single_row(row, current_split_name, row_index, system_content, user_
 
 
 def main():
+    # Setup logging with force=True to ensure our configuration is applied
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        force=True
+    )
+
     local_save_dir = os.path.expanduser(args.local_dir)
     os.makedirs(local_save_dir, exist_ok=True)
+
+    # Log subset mode if enabled
+    if args.test_subset_ratio:
+        percentage = args.test_subset_ratio * 100
+        logger.info(f"Test subset mode enabled: will create an additional {percentage:.0f}% subset of test data")
 
     # Load template or use direct overrides
     if args.system_content or args.user_content_prefix:
@@ -172,9 +183,20 @@ def main():
         if all_datasets:
             # Concatenate all datasets for this split
             combined_df = pd.concat(all_datasets, ignore_index=True)
+
+            # Always save the full dataset
             output_file_path = os.path.join(local_save_dir, f"{args.template}_{split}.parquet")
             combined_df.to_parquet(output_file_path, index=False)
             logger.info(f"Saved {len(combined_df)} processed rows to {output_file_path}")
+
+            # Additionally create subset file for test split if requested
+            if split == "test" and args.test_subset_ratio:
+                percentage = args.test_subset_ratio * 100
+                logger.info(f"Creating additional {percentage:.0f}% subset of test data (original size: {len(combined_df)} rows)")
+                subset_df = combined_df.sample(frac=args.test_subset_ratio, random_state=42)
+                subset_file_path = os.path.join(local_save_dir, f"{args.template}_subset_{split}.parquet")
+                subset_df.to_parquet(subset_file_path, index=False)
+                logger.info(f"Saved {len(subset_df)} subset rows to {subset_file_path}")
         else:
             logger.warning(f"No datasets processed for {split} split")
 
@@ -224,7 +246,20 @@ if __name__ == "__main__":
     parser.add_argument("--system_content", default=None, help="Override system message content directly.")
     parser.add_argument("--user_content_prefix", default=None, help="Override user message prefix directly.")
 
+    # Test subset sampling
+    parser.add_argument(
+        "--test_subset_ratio",
+        type=float,
+        default=None,
+        help="Additionally create a subset of test data with specified ratio. Full test set is always generated. If not specified, no subset is created.",
+    )
+
     args = parser.parse_args()
+
+    # Validate test_subset_ratio if provided
+    if args.test_subset_ratio is not None:
+        if not 0 < args.test_subset_ratio <= 1:
+            parser.error("--test_subset_ratio must be between 0 and 1 (e.g., 0.1 for 10%, 0.5 for 50%)")
 
     # Handle --list_templates
     if args.list_templates:
