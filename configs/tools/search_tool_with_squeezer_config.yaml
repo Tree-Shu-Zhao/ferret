@@ -1,0 +1,30 @@
+tools:
+  - class_name: scout.tools.search_tool_with_squeezer.SearchToolWithSqueezer
+    config:
+      # Standard SearchTool configuration
+      retrieval_service_url: http://127.0.0.1:8000/retrieve
+      num_workers: 120
+      rate_limit: 120
+      timeout: 30
+      topk: 10
+      type: native
+
+      # Squeezer-specific configuration
+      squeezer_model: meta/llama-4-maverick-17b-128e-instruct 
+      squeezer_max_tokens: 512
+
+    tool_schema:
+      type: function
+      function:
+        name: search
+        description: Searches the web for relevant information based on the given queries and compresses the results into a concise answer.
+        parameters:
+          type: object
+          properties:
+            query_list:
+              type: array
+              item:
+                type: string
+              description: A list of diverse query variants (paraphrases, decomposed sub-questions, keyword expansions) to facilitate retrieval for more comprehensive and relevant knowledge. The tool will retrieve documents for each query and compress all results into one answer.
+          required:
+            - query_list
