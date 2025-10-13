@@ -1,4 +1,4 @@
-file_path=/mnt/data/retrieval-corpus
+file_path=$DATA_DIR
 
 index_file=$file_path/e5_Flat.index
 corpus_file=$file_path/wiki-18.jsonl
