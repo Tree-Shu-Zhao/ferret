@@ -4,17 +4,19 @@
 [![Python](https://img.shields.io/badge/Python-3.12%2B-blue.svg)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.8%2B-red.svg)](https://pytorch.org/)
 
-Scout is an extensible framework for training Large Language Model (LLM) agents via reinforcement learning with advanced search capability. Built on top of [VERL (Volcano Engine Reinforcement Learning for LLMs)](https://github.com/volcengine/verl), Scout implements state-of-the-art search strategies with multi-turn interactions and retrieval capabilities. Scout is designed to seamlessly integrate with the latest VERL releases without requiring framework modifications, and supports cutting-edge LLMs including Qwen3 and other state-of-the-art models.
+Scout is an extensible framework for training Large Language Model (LLM) agents via reinforcement learning with advanced search capability. Built on top of [VERL](https://github.com/volcengine/verl), Scout implements state-of-the-art search strategies with multi-turn interactions and retrieval capabilities. Scout is designed to seamlessly integrate with the latest VERL releases without requiring framework modifications, and supports cutting-edge LLMs including Qwen3 and other state-of-the-art models.
+
+## News
+
+- [2025/10] We have released [scout](https://github.com/Tree-Shu-Zhao/scout), an extensible RL framework for training LLM agents with advanced search capabilities, built on VERL and supporting state-of-the-art search strategies. [ParallelSearch](https://shuzhao.me/ParallelSearchProject/), [ExpandSearch](https://shuzhao.me/ExpandSearchProject/), and [Search-R1](https://arxiv.org/abs/2505.15117) recipes are fully open-sourced.
+- [2025/08] We introduce [ParallelSearch](https://shuzhao.me/ParallelSearchProject/), a method that recognizes parallelizable query structures and executes multiple search operations concurrently. The original repo can be found [here](https://github.com/Tree-Shu-Zhao/ParallelSearch).
 
 ## 🌟 Key Features
 
-- **🔗 Seamless VERL Integration**: Non-invasive design that works with the latest VERL releases without modifying the core framework
-- **🤖 Latest LLM Support**: Compatible with cutting-edge models including Qwen3, Qwen2.5, and other state-of-the-art LLMs
-- **🔍 Multiple Search Strategies**: Implements ParallelSearch, ExpandSearch, and Search-R1 with more strategies in active development 
+- **🔍 Multiple Search Strategies**: Implements ParallelSearch, ExpandSearch, and Search-R1 with more strategies in active development
+- **🛠️ Modular Architecture**: Easy-to-customize components for data, rewards, and tools
+- **🤖 Latest LLM Support**: Compatible with cutting-edge models including Qwen3, Qwen2.5, and other state-of-the-art LLMs with the latest VERL framework
 - **🚀 High-Performance Training**: Efficient RLHF framework with FSDP distributed training
-- **🛠️ Modular Architecture**: Easy-to-customize components for prompts, rewards, and tools
-- **⚙️ Flexible Configuration**: Hydra-based configuration management for easy experimentation
-- **📈 Custom Reward Functions**: Configurable reward system with format validation and retrieval scoring
 
 ## 📋 Table of Contents
 
@@ -329,6 +331,13 @@ If you found our paper useful, please cite it:
   title={ParallelSearch: Train your LLMs to Decompose Query and Search Sub-queries in Parallel with Reinforcement Learning},
   author={Zhao, Shu and Yu, Tan and Xu, Anbang and Singh, Japinder and Shukla, Aaditya and Akkiraju, Rama},
   journal={arXiv preprint arXiv:2508.09303},
+  year={2025}
+}
+
+@article{zhao2025expandsearch,
+  title={Beyond the limitation of a single query: Train your LLM for query expansion with Reinforcement Learning},
+  author={Zhao, Shu and Yu, Tan and Xu, Anbang},
+  journal={arXiv preprint arXiv:2510.10009},
   year={2025}
 }
 ```
