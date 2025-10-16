@@ -23,6 +23,7 @@ Scout is an extensible framework for training Large Language Model (LLM) agents 
 - [Key Features](#-key-features)
 - [Installation](#-installation)
 - [Quick Start](#-quick-start)
+- [Recipe Examples](#-recipe-examples)
 - [Model Checkpoints](#-model-checkpoints)
 - [Customization Guide for Researchers](#-customization-guide-for-researchers)
 - [Citation](#-citation)
@@ -144,6 +145,18 @@ bash recipe/parallel_search/eval_ParallelSearch.sh
 # bash recipe/search-r1/eval_search-r1.sh
 # bash recipe/expand_search/eval_ExpandSearch.sh
 ```
+
+## 📚 Recipe Examples
+
+The `recipe/` folder contains complete end-to-end examples for different search strategies. Each recipe includes data preprocessing, training, and evaluation scripts.
+
+Each recipe folder provides:
+- Data preprocessing scripts for the specific strategy
+- Training scripts with recommended hyperparameters
+- Evaluation scripts for benchmarking
+- Strategy-specific configuration examples
+
+Browse the `recipe/` folder to find the search strategy that best fits your research needs, or use them as templates to create your own custom strategies.
 
 ## 🤗 Model Checkpoints
 
