@@ -357,12 +357,12 @@ If you found our paper useful, please cite it:
 
 ## 🙏 Acknowledgments
 
-Ferret is built on top of several excellent open-source projects:
+Ferret is built on top of several excellent projects and services:
 - [Search-R1](https://github.com/PeterGriffinJin/Search-R1)
 - [VERL](https://github.com/volcengine/verl)
 - [SGLang](https://github.com/sgl-project/sglang)
-
-Special thanks to [NVIDIA Brev Team](https://developer.nvidia.com/brev) for their hardware and training resources support. Their technical support and computational infrastructure were instrumental in enabling the large-scale experiments reported in this work. The platform's streamlined setup and one-click deployment capabilities made it remarkably easy for our team to quickly start experimenting without extensive infrastructure management. We also thank [NVIDIA NIM Team](https://developer.nvidia.com/nim) for providing LLM access via API calls, which significantly streamlined our development. The reliable API infrastructure and diverse model offerings enabled rapid prototyping and iteration, allowing us to efficiently explore different approaches and validate our methods at scale.
+- [Brev](https://developer.nvidia.com/brev)
+- [NIM](https://developer.nvidia.com/nim)
 
 ---
 
