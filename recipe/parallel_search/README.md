@@ -35,9 +35,9 @@ bash recipe/parallel_search/eval_ParallelSearch.sh
 
 | Model | HuggingFace Checkpoint |
 |-------|----------------------|
-| Qwen2.5-7B-Instruct | [TreezzZ/Scout_ParallelSearch_Qwen2.5-7b-instruct_ppo](https://huggingface.co/TreezzZ/Scout_ParallelSearch_Qwen2.5-7b-instruct_ppo) |
-| Qwen3-4B-Instruct | [TreezzZ/Scout_ParallelSearch_Qwen3-4b-instruct_ppo](https://huggingface.co/TreezzZ/Scout_ParallelSearch_Qwen3-4b-instruct_ppo) |
-| Qwen3-30B-A3B-Instruct | [TreezzZ/Scout_ParallelSearch_Qwen3-30b-a3b-instruct_ppo](https://huggingface.co/TreezzZ/Scout_ParallelSearch_Qwen3-30b-a3b-instruct_ppo) |
+| Qwen2.5-7B-Instruct | [TreezzZ/Ferret_ParallelSearch_Qwen2.5-7b-instruct_ppo](https://huggingface.co/TreezzZ/Ferret_ParallelSearch_Qwen2.5-7b-instruct_ppo) |
+| Qwen3-4B-Instruct | [TreezzZ/Ferret_ParallelSearch_Qwen3-4b-instruct_ppo](https://huggingface.co/TreezzZ/Ferret_ParallelSearch_Qwen3-4b-instruct_ppo) |
+| Qwen3-30B-A3B-Instruct | [TreezzZ/Ferret_ParallelSearch_Qwen3-30b-a3b-instruct_ppo](https://huggingface.co/TreezzZ/Ferret_ParallelSearch_Qwen3-30b-a3b-instruct_ppo) |
 
 ## Links
 

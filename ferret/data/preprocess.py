@@ -6,7 +6,7 @@ import sys
 import datasets
 import pandas as pd
 
-from scout.data.templates import get_template, list_templates
+from ferret.data.templates import get_template, list_templates
 from verl.utils.hdfs_io import copy, makedirs
 
 # Logger will be configured in main()

@@ -15,7 +15,7 @@ Paper notation:
 import re
 import random
 import json
-from scout.reward_score.search_r1_format import (
+from ferret.reward_score.search_r1_format import (
     em_check,
     is_valid_sequence,
     extract_solution,

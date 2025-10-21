@@ -28,8 +28,8 @@ bash recipe/search-r1/eval_search-r1.sh
 
 | Model | Checkpoint |
 |-------|----------------------|
-| Qwen2.5-3B-Instruct | [Scout_Search-R1_Qwen2.5-3b-instruct_ppo](https://huggingface.co/TreezzZ/Scout_Search-R1_Qwen2.5-3b-instruct_ppo) |
-| Qwen2.5-14B-Instruct | [Scout_Search-R1_Qwen2.5-14b-instruct_ppo](https://huggingface.co/TreezzZ/Scout_Search-R1_Qwen2.5-14b-instruct_ppo) |
+| Qwen2.5-3B-Instruct | [Ferret_Search-R1_Qwen2.5-3b-instruct_ppo](https://huggingface.co/TreezzZ/Ferret_Search-R1_Qwen2.5-3b-instruct_ppo) |
+| Qwen2.5-14B-Instruct | [Ferret_Search-R1_Qwen2.5-14b-instruct_ppo](https://huggingface.co/TreezzZ/Ferret_Search-R1_Qwen2.5-14b-instruct_ppo) |
 
 ## Links
 

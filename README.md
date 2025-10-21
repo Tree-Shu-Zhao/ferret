@@ -1,14 +1,14 @@
-# Scout: Extensible RL Framework for Training Search Agents
+# Ferret: Extensible RL Framework for Training Search Agents
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.12%2B-blue.svg)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.8%2B-red.svg)](https://pytorch.org/)
 
-Scout is an extensible framework for training Large Language Model (LLM) agents via reinforcement learning with advanced search capability. Built on top of [VERL](https://github.com/volcengine/verl), Scout implements state-of-the-art search strategies with multi-turn interactions and retrieval capabilities. Scout is designed to seamlessly integrate with the latest VERL releases without requiring framework modifications, and supports cutting-edge LLMs including Qwen3 and other state-of-the-art models.
+Ferret is an extensible framework for training Large Language Model (LLM) agents via reinforcement learning with advanced search capability. Built on top of [VERL](https://github.com/volcengine/verl), Ferret implements state-of-the-art search strategies with multi-turn interactions and retrieval capabilities. Ferret is designed to seamlessly integrate with the latest VERL releases without requiring framework modifications, and supports cutting-edge LLMs including Qwen3 and other state-of-the-art models.
 
 ## News
 
-- [2025/10] We have released [scout](https://github.com/Tree-Shu-Zhao/scout), an extensible RL framework for training LLM agents with advanced search capabilities, built on VERL and supporting state-of-the-art search strategies. [ParallelSearch](https://shuzhao.me/ParallelSearchProject/), [ExpandSearch](https://shuzhao.me/ExpandSearchProject/), and [Search-R1](https://arxiv.org/abs/2505.15117) recipes are fully open-sourced.
+- [2025/10] We have released [Ferret](https://github.com/Tree-Shu-Zhao/ferret), an extensible RL framework for training LLM agents with advanced search capabilities, built on VERL and supporting state-of-the-art search strategies. [ParallelSearch](https://shuzhao.me/ParallelSearchProject/), [ExpandSearch](https://shuzhao.me/ExpandSearchProject/), and [Search-R1](https://arxiv.org/abs/2505.15117) recipes are fully open-sourced.
 - [2025/08] We introduce [ParallelSearch](https://shuzhao.me/ParallelSearchProject/), a method that recognizes parallelizable query structures and executes multiple search operations concurrently. The original repo can be found [here](https://github.com/Tree-Shu-Zhao/ParallelSearch).
 
 ## 🌟 Key Features
@@ -41,8 +41,8 @@ Scout is an extensible framework for training Large Language Model (LLM) agents 
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/Tree-Shu-Zhao/scout.git
-cd scout
+git clone https://github.com/Tree-Shu-Zhao/ferret.git
+cd ferret
 git submodule update --init --recursive
 ```
 
@@ -162,18 +162,18 @@ Browse the `recipe/` folder to find the search strategy that best fits your rese
 
 Access our models on Hugging Face:
 
-[🔗 Scout Collection](https://huggingface.co/collections/TreezzZ/scout-68ec65519567237a52d16627)
+[🔗 Ferret Collection](https://huggingface.co/collections/TreezzZ/ferret-68ec65519567237a52d16627)
 
 ## 🔬 Customization Guide for Researchers
 
-Scout is designed to be easily extensible for research purposes. Here's how to add your own components:
+Ferret is designed to be easily extensible for research purposes. Here's how to add your own components:
 
 ### Adding Custom Prompt Templates
 
-Create a new template in `scout/data/templates/`:
+Create a new template in `ferret/data/templates/`:
 
 ```python
-# scout/data/templates/your_strategy.py
+# ferret/data/templates/your_strategy.py
 from . import PromptTemplate, register_template
 
 TEMPLATE_NAME = "your_strategy"
@@ -200,15 +200,15 @@ register_template(template)
 Then use it in preprocessing:
 
 ```bash
-python scout/data/preprocess.py --template_name your_strategy
+python ferret/data/preprocess.py --template_name your_strategy
 ```
 
 ### Implementing Custom Reward Functions
 
-Add a new reward function in `scout/reward_score/`:
+Add a new reward function in `ferret/reward_score/`:
 
 ```python
-# scout/reward_score/your_reward.py
+# ferret/reward_score/your_reward.py
 import re
 
 def compute_score_custom(solution_str, ground_truth, data_source, extra_info, **kwargs):
@@ -266,7 +266,7 @@ Configure in training script:
 
 ```bash
 python3 -m verl.trainer.main_ppo \
-    custom_reward_function.path="scout/reward_score/your_reward.py" \
+    custom_reward_function.path="ferret/reward_score/your_reward.py" \
     custom_reward_function.name=compute_score_custom \
     +custom_reward_function.reward_kwargs.format_score=0.2 \
     +custom_reward_function.reward_kwargs.retrieval_score=0.3 \
@@ -309,8 +309,8 @@ tools:
 
 Combine templates, rewards, and tools to create a new strategy:
 
-1. **Define the template** (scout/data/templates/)
-2. **Implement the reward function** (scout/reward_score/)
+1. **Define the template** (ferret/data/templates/)
+2. **Implement the reward function** (ferret/reward_score/)
 3. **Configure tools** (configs/tools/)
 4. **Create a recipe folder with training scripts** (recipe/your_strategy/)
 
@@ -327,7 +327,7 @@ CONFIG_PATH="$PROJECT_DIR/configs"
 python3 -m verl.trainer.main_ppo \
     --config-path="$CONFIG_PATH/train" \
     --config-name="ppo" \
-    custom_reward_function.path="$PROJECT_DIR/scout/reward_score/your_reward.py" \
+    custom_reward_function.path="$PROJECT_DIR/ferret/reward_score/your_reward.py" \
     custom_reward_function.name=compute_score_custom \
     actor_rollout_ref.model.path="Qwen/Qwen2.5-3B-Instruct" \
     data.train_files="$DATA_DIR/your_strategy_train.parquet" \
@@ -357,7 +357,7 @@ If you found our paper useful, please cite it:
 
 ## 🙏 Acknowledgments
 
-Scout is built on top of several excellent open-source projects:
+Ferret is built on top of several excellent open-source projects:
 - [Search-R1](https://github.com/PeterGriffinJin/Search-R1)
 - [VERL](https://github.com/volcengine/verl)
 - [SGLang](https://github.com/sgl-project/sglang)

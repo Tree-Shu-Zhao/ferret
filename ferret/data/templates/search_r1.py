@@ -1,7 +1,7 @@
 """
 Search-R1 template.
 
-This is the default template used in scout/data/preprocess.py with detailed
+This is the default template used in ferret/data/preprocess.py with detailed
 user instructions for reasoning and search tool usage.
 """
 

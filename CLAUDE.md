@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Scout is an extensible framework for training LLM agents via reinforcement learning with advanced search and tool-use capabilities. It's built on top of VERL (Volcano Engine Reinforcement Learning for LLMs), implementing a Search-R1 like approach with multi-turn interactions and web search capabilities.
+Ferret is an extensible framework for training LLM agents via reinforcement learning with advanced search and tool-use capabilities. It's built on top of VERL (Volcano Engine Reinforcement Learning for LLMs), implementing a Search-R1 like approach with multi-turn interactions and web search capabilities.
 
 ## Key Architecture Components
 
@@ -16,18 +16,18 @@ Scout is an extensible framework for training LLM agents via reinforcement learn
 
 ### Main Components
 
-1. **Data Processing Pipeline** (`scout/data/preprocess.py`):
+1. **Data Processing Pipeline** (`ferret/data/preprocess.py`):
    - Processes datasets from HuggingFace into Search-R1 format
    - Adds structured prompts with `<think>`, `<search>`, `<information>`, and `<answer>` tags
    - Configures tool usage kwargs for search functionality
 
-2. **Reward System** (`scout/reward_score/`):
+2. **Reward System** (`ferret/reward_score/`):
    - Custom reward functions for evaluating agent responses
    - Format validation for structured thinking patterns
    - Exact match (EM) scoring for answer evaluation
    - Configurable reward weights for different aspects (structure, retrieval, final answer)
 
-3. **Retrieval Service** (`scout/retrieval/`):
+3. **Retrieval Service** (`ferret/retrieval/`):
    - Dense retrieval server using FAISS indexing
    - E5-based embedding model for semantic search
    - REST API for integration with training pipeline
@@ -44,7 +44,7 @@ Scout is an extensible framework for training LLM agents via reinforcement learn
 # Download and preprocess training data from HuggingFace
 bash scripts/data_preprocess/data_preprocess.sh
 # Or directly:
-python scout/data/preprocess.py --local_dir data
+python ferret/data/preprocess.py --local_dir data
 ```
 
 ### Training
@@ -122,7 +122,7 @@ Main dependencies (from `pyproject.toml`):
 
 # Coding Guideline
 
-1. You MUST NOT modify the verl folder since the scout codebase would like to seamlessly integrate with the latest verl.
+1. You MUST NOT modify the verl folder since the ferret codebase would like to seamlessly integrate with the latest verl.
 2. You are ONLY ALLOWED to create new files if necessary. Try to reuse infra in verl.
 3. You MUST NOT create any documentations like markdown files.
 4. If you need to run test, please use the virtual environment in .venv

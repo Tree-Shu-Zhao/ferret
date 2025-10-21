@@ -1,5 +1,5 @@
 [project]
-name = "scout"
+name = "ferret"
 version = "0.1.0"
 description = "Extensible framework for training LLM agents via reinforcement learning with advanced search and tool-use capabilities."
 readme = "README.md"

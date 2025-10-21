@@ -1,5 +1,5 @@
 tools:
-  - class_name: scout.tools.search_tool_with_squeezer.SearchToolWithSqueezer
+  - class_name: ferret.tools.search_tool_with_squeezer.SearchToolWithSqueezer
     config:
       # Standard SearchTool configuration
       retrieval_service_url: http://127.0.0.1:8000/retrieve

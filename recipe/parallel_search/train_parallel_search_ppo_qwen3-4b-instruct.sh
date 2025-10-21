@@ -11,10 +11,10 @@ DATA_DIR="$PROJECT_DIR/data"
 
 CONFIG_PATH="$PROJECT_DIR/configs"
 TOOL_CONFIG="$CONFIG_PATH/tools/search_tool_config.yaml"
-REWARD_FUNCTION_PATH="$PROJECT_DIR/scout/reward_score"
+REWARD_FUNCTION_PATH="$PROJECT_DIR/ferret/reward_score"
 
 BASE_MODEL="Qwen/Qwen3-4B-Instruct-2507"
-PROJECT_NAME="scout"
+PROJECT_NAME="ferret"
 EXPERIMENT_NAME="parallel_search_qwen3-4b-instruct-ppo"
 
 python3 -m verl.trainer.main_ppo \

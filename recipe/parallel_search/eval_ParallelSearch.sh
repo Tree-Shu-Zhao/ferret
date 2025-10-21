@@ -11,10 +11,10 @@ DATA_DIR="$PROJECT_DIR/data"
 
 CONFIG_PATH="$PROJECT_DIR/configs"
 TOOL_CONFIG="$CONFIG_PATH/tools/search_tool_config.yaml"
-REWARD_FUNCTION_PATH="$PROJECT_DIR/scout/reward_score"
+REWARD_FUNCTION_PATH="$PROJECT_DIR/ferret/reward_score"
 
-BASE_MODEL="TreezzZ/Scout_ParallelSearch_Qwen2.5-7b-instruct_ppo"
-PROJECT_NAME="scout"
+BASE_MODEL="TreezzZ/Ferret_ParallelSearch_Qwen2.5-7b-instruct_ppo"
+PROJECT_NAME="ferret"
 EXPERIMENT_NAME="parallel_search_qwen2.5-7b-instruct-ppo"
 DUMP_VALIDATION_DATA_DIR="outputs/$PROJECT_NAME/$EXPERIMENT_NAME/validation_data"
 

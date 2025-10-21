@@ -41,7 +41,7 @@ bash recipe/expand_search/eval_ExpandSearch.sh
 
 | Model | HuggingFace Checkpoint |
 |-------|----------------------|
-| Qwen2.5-3B-Instruct + Llama4-Maverick-17B (Squeezer) | [TreezzZ/Scout_ExpandSearch_Qwen2.5-3b-instruct_Llama4-Maverick-17b-128e-instruct_ppo](https://huggingface.co/TreezzZ/Scout_ExpandSearch_Qwen2.5-3b-instruct_Llama4-Maverick-17b-128e-instruct_ppo) |
+| Qwen2.5-3B-Instruct + Llama4-Maverick-17B (Squeezer) | [TreezzZ/Ferret_ExpandSearch_Qwen2.5-3b-instruct_Llama4-Maverick-17b-128e-instruct_ppo](https://huggingface.co/TreezzZ/Ferret_ExpandSearch_Qwen2.5-3b-instruct_Llama4-Maverick-17b-128e-instruct_ppo) |
 
 
 ## Links

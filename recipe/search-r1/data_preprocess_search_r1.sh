@@ -1,4 +1,4 @@
-python -m scout.data.preprocess \
+python -m ferret.data.preprocess \
     --template search_r1 \
     --train_data_sources nq,hotpotqa \
     --test_data_sources nq,triviaqa,popqa,hotpotqa,2wikimultihopqa,musique,bamboogle \
