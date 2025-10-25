@@ -77,6 +77,7 @@ def process_single_row(row, current_split_name, row_index, system_content, user_
     return pd.Series(
         {
             "data_source": data_source_tagged,
+            "agent_name": "tool_agent",
             "prompt": prompt,
             "ability": "fact-reasoning",
             "reward_model": reward_model_data,

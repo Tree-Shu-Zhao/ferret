@@ -65,10 +65,12 @@ def extract_search_decomposition_info(solution_str):
     return total_queries, has_decomposition
 
 
-def compute_score_em(solution_str, ground_truth, data_source, extra_info,
-                    structure_format_score=0.1, final_format_score=0.0,
-                    retrieval_score=0.1, score=1.0,
-                    lambda_d=0.15, lambda_s=0.35, alpha=3.0):
+def compute_score_em(
+    solution_str, ground_truth, data_source, extra_info,
+    structure_format_score=0.1, final_format_score=0.0,
+    retrieval_score=0.1, score=1.0,
+    lambda_d=0.15, lambda_s=0.35, alpha=3.0,
+    *args, **kwargs):
     """The scoring function for ParallelSearch with decomposition rewards.
 
     Args:

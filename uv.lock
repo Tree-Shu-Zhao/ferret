@@ -651,6 +651,31 @@ wheels = [
 ]
 
 [[package]]
+name = "ferret"
+version = "0.2.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "flash-attn" },
+    { name = "langchain-nvidia-ai-endpoints" },
+    { name = "pip" },
+    { name = "sglang", extra = ["all"] },
+    { name = "torch" },
+    { name = "verl" },
+    { name = "wandb" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "flash-attn" },
+    { name = "langchain-nvidia-ai-endpoints" },
+    { name = "pip" },
+    { name = "sglang", extras = ["all"] },
+    { name = "torch", specifier = ">=2.8.0", index = "https://download.pytorch.org/whl/cu129" },
+    { name = "verl", editable = "verl" },
+    { name = "wandb" },
+]
+
+[[package]]
 name = "filelock"
 version = "3.19.1"
 source = { registry = "https://pypi.org/simple" }
@@ -3507,31 +3532,6 @@ wheels = [
 ]
 
 [[package]]
-name = "ferret"
-version = "0.1.0"
-source = { virtual = "." }
-dependencies = [
-    { name = "flash-attn" },
-    { name = "langchain-nvidia-ai-endpoints" },
-    { name = "pip" },
-    { name = "sglang", extra = ["all"] },
-    { name = "torch" },
-    { name = "verl" },
-    { name = "wandb" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "flash-attn" },
-    { name = "langchain-nvidia-ai-endpoints" },
-    { name = "pip", specifier = ">=25.2" },
-    { name = "sglang", extras = ["all"], specifier = ">=0.5.3rc0" },
-    { name = "torch", specifier = ">=2.8.0", index = "https://download.pytorch.org/whl/cu129" },
-    { name = "verl", editable = "verl" },
-    { name = "wandb" },
-]
-
-[[package]]
 name = "sentence-transformers"
 version = "5.1.1"
 source = { registry = "https://pypi.org/simple" }
@@ -4311,12 +4311,13 @@ requires-dist = [
     { name = "torch", marker = "extra == 'sglang'", specifier = "==2.8.0" },
     { name = "torchdata" },
     { name = "torchvision", marker = "extra == 'geo'" },
+    { name = "transferqueue", marker = "extra == 'transferqueue'", git = "https://github.com/TransferQueue/TransferQueue.git?rev=68c04e7" },
     { name = "transformers" },
     { name = "trl", marker = "extra == 'trl'", specifier = "<=0.9.6" },
     { name = "vllm", marker = "extra == 'vllm'", specifier = ">=0.7.3,<=0.9.1" },
     { name = "wandb" },
 ]
-provides-extras = ["test", "prime", "geo", "gpu", "math", "vllm", "sglang", "trl", "mcore"]
+provides-extras = ["test", "prime", "geo", "gpu", "math", "vllm", "sglang", "trl", "mcore", "transferqueue"]
 
 [[package]]
 name = "virtualenv"

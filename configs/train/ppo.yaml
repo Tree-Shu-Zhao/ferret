@@ -43,15 +43,16 @@ actor_rollout_ref:
   rollout:
     n: 1
     name: sglang
+    mode: async
     max_model_len: 15000
     log_prob_micro_batch_size_per_gpu: 128
     tensor_model_parallel_size: 1
     gpu_memory_utilization: 0.6
     multi_turn:
-      format: qwen
+      format: hermes
       enable: True
       max_assistant_turns: 4
-      max_tool_response_length: 500
+      max_tool_response_length: 4096
       tokenization_sanity_check_mode: "disable"
   ref:
     log_prob_micro_batch_size_per_gpu: 128

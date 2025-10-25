@@ -15,7 +15,7 @@ REWARD_FUNCTION_PATH="$PROJECT_DIR/ferret/reward_score"
 
 BASE_MODEL="Qwen/Qwen3-4B-Instruct-2507"
 PROJECT_NAME="ferret"
-EXPERIMENT_NAME="parallel_search_qwen3-4b-instruct-ppo"
+EXPERIMENT_NAME="ParallelSearch_qwen3-4b-instruct_ppo"
 
 python3 -m verl.trainer.main_ppo \
     --config-path="$CONFIG_PATH/train" \

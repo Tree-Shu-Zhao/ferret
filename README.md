@@ -8,8 +8,9 @@ Ferret is an extensible framework for training Large Language Model (LLM) agents
 
 ## News
 
-- [2025/10] We have released [Ferret](https://github.com/Tree-Shu-Zhao/ferret), an extensible RL framework for training LLM agents with advanced search capabilities, built on VERL and supporting state-of-the-art search strategies. [ParallelSearch](https://shuzhao.me/ParallelSearchProject/), [ExpandSearch](https://shuzhao.me/ExpandSearchProject/), and [Search-R1](https://arxiv.org/abs/2505.15117) recipes are fully open-sourced.
-- [2025/08] We introduce [ParallelSearch](https://shuzhao.me/ParallelSearchProject/), a method that recognizes parallelizable query structures and executes multiple search operations concurrently. The original repo can be found [here](https://github.com/Tree-Shu-Zhao/ParallelSearch).
+- [10/24/2025] Ferret now integrates VERL v0.7.0-dev, featuring fully asynchronous rollout mode and token-in-token-out for improved stability and efficiency in multi-turn RL training.
+- [10/12/2025] We have released [Ferret](https://github.com/Tree-Shu-Zhao/ferret), an extensible RL framework for training LLM agents with advanced search capabilities, built on VERL and supporting state-of-the-art search strategies. [ParallelSearch](https://shuzhao.me/ParallelSearchProject/), [ExpandSearch](https://shuzhao.me/ExpandSearchProject/), and [Search-R1](https://arxiv.org/abs/2505.15117) recipes are fully open-sourced.
+- [08/13/2025] We introduce [ParallelSearch](https://shuzhao.me/ParallelSearchProject/), a method that recognizes parallelizable query structures and executes multiple search operations concurrently. The original repo can be found [here](https://github.com/Tree-Shu-Zhao/ParallelSearch).
 
 ## 🌟 Key Features
 

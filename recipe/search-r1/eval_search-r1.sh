@@ -15,7 +15,7 @@ REWARD_FUNCTION_PATH="$PROJECT_DIR/ferret/reward_score"
 
 CHECKPOINT="TreezzZ/Ferret_Search-R1_Qwen2.5-3b-instruct_ppo"
 PROJECT_NAME="ferret"
-EXPERIMENT_NAME="search-r1_qwen2.5-3b-instruct-ppo"
+EXPERIMENT_NAME="Search-R1_qwen2.5-3b-instruct_ppo"
 DUMP_VALIDATION_DATA_DIR="outputs/$PROJECT_NAME/$EXPERIMENT_NAME/validation_data"
 
 python3 -m verl.trainer.main_ppo \

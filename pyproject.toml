@@ -1,6 +1,6 @@
 [project]
 name = "ferret"
-version = "0.1.0"
+version = "0.2.0"
 description = "Extensible framework for training LLM agents via reinforcement learning with advanced search and tool-use capabilities."
 readme = "README.md"
 requires-python = ">=3.12"
@@ -8,10 +8,10 @@ dependencies = [
     "verl",
     "torch>=2.8.0",
     "flash-attn",
-    "sglang[all]>=0.5.3rc0",
+    "sglang[all]",
     "wandb",
     "langchain-nvidia-ai-endpoints",
-    "pip>=25.2",
+    "pip",
 ]
 
 [tool.uv.sources]
