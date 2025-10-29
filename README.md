@@ -357,7 +357,7 @@ If you found our paper useful, please cite it:
 
 ## 🙏 Acknowledgments
 
-Ferret is built on top of several excellent projects and services:
+Ferret is built on top of several excellent projects:
 - [Search-R1](https://github.com/PeterGriffinJin/Search-R1)
 - [VERL](https://github.com/volcengine/verl)
 - [SGLang](https://github.com/sgl-project/sglang)
