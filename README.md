@@ -124,26 +124,16 @@ The service will run on port 8000 by default. Ensure the service is running befo
 Train a ParallelSearch model with Qwen2.5-7B (or any latest LLM like Qwen3):
 
 ```bash
-bash recipe/parallel_search/train_parallel_search_ppo_qwen2.5-7b-instruct.sh
+bash recipe/search-r1/train_search-r1_ppo_qwen2.5-3b-instruct.sh
 
 # To use Qwen3 or other latest models, simply modify the model path:
 # Edit the script and change: actor_rollout_ref.model.path="Qwen/Qwen3-4B-Instruct"
-
-# Alternative model configurations:
-# bash recipe/parallel_search/train_parallel_search_ppo_qwen3-30b-a3b-instruct.sh
-# bash recipe/parallel_search/train_parallel_search_ppo_qwen3-4b-instruct.sh
-# bash recipe/search-r1/train_search-r1_ppo_qwen2.5-3b-instruct.sh
 ```
 
 ### 4. Evaluate the Model
 
 ```bash
-# For ParallelSearch method:
-bash recipe/parallel_search/eval_ParallelSearch.sh
-
-# Or for other methods:
-# bash recipe/search-r1/eval_search-r1.sh
-# bash recipe/expand_search/eval_ExpandSearch.sh
+bash recipe/search-r1/eval_search-r1.sh
 ```
 
 ## 📚 Recipe Examples
@@ -333,26 +323,6 @@ python3 -m verl.trainer.main_ppo \
     data.train_files="$DATA_DIR/your_strategy_train.parquet" \
     data.val_files="$DATA_DIR/your_strategy_test.parquet" \
     actor_rollout_ref.rollout.multi_turn.tool_config_path="$CONFIG_PATH/tools/your_tool_config.yaml"
-```
-
-## 📝 Citation
-
-If you found our paper useful, please cite it:
-
-```bibtex
-@article{zhao2025parallelsearch,
-  title={ParallelSearch: Train your LLMs to Decompose Query and Search Sub-queries in Parallel with Reinforcement Learning},
-  author={Zhao, Shu and Yu, Tan and Xu, Anbang and Singh, Japinder and Shukla, Aaditya and Akkiraju, Rama},
-  journal={arXiv preprint arXiv:2508.09303},
-  year={2025}
-}
-
-@article{zhao2025expandsearch,
-  title={Beyond the limitation of a single query: Train your LLM for query expansion with Reinforcement Learning},
-  author={Zhao, Shu and Yu, Tan and Xu, Anbang},
-  journal={arXiv preprint arXiv:2510.10009},
-  year={2025}
-}
 ```
 
 ## 🙏 Acknowledgments
