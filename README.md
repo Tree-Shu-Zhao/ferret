@@ -63,12 +63,7 @@ source .venv/bin/activate
 Download and preprocess data:
 
 ```bash
-# For ParallelSearch method
-bash recipe/parallel_search/data_preprocess_parallel_search.sh
-
-# Or for other methods:
-# bash recipe/search-r1/data_preprocess_search_r1.sh
-# bash recipe/expand_search/data_preprocess_expand_search.sh
+bash recipe/search-r1/data_preprocess_search_r1.sh
 ```
 
 ### 2. Set Up and Start Retrieval Service (Required for Training)
@@ -120,8 +115,6 @@ bash scripts/retrieval/run_retrieval_server.sh
 The service will run on port 8000 by default. Ensure the service is running before starting training.
 
 ### 3. Train Your First Model
-
-Train a ParallelSearch model with Qwen2.5-7B (or any latest LLM like Qwen3):
 
 ```bash
 bash recipe/search-r1/train_search-r1_ppo_qwen2.5-3b-instruct.sh
