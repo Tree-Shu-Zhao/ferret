@@ -15,11 +15,11 @@ REWARD_FUNCTION_PATH="$PROJECT_DIR/ferret/reward_score"
 
 BASE_MODEL="Qwen/Qwen3-30B-A3B-Instruct-2507"
 PROJECT_NAME="ferret"
-EXPERIMENT_NAME="Search-R1_Qwen3-30B-A3B-Instruct_grpo"
+EXPERIMENT_NAME="Search-R1_Qwen3-30B-A3B-Instruct_ppo"
 
 python3 -m verl.trainer.main_ppo \
     --config-path="$CONFIG_PATH/train" \
-    --config-name="grpo" \
+    --config-name="ppo" \
     custom_reward_function.path="$REWARD_FUNCTION_PATH/search_r1_format.py" \
     custom_reward_function.name=compute_score_em \
     +custom_reward_function.reward_kwargs.structure_format_score=0.2 \
