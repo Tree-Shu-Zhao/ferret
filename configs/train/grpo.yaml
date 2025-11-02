@@ -18,7 +18,7 @@ data:
 
 # Algorithm configuration
 algorithm:
-  adv_estimator: gae
+  adv_estimator: grpo
   use_kl_in_reward: False
 
 # Actor, Rollout, and Reference model configuration
@@ -27,7 +27,7 @@ actor_rollout_ref:
     use_remove_padding: True
     enable_gradient_checkpointing: True
   actor:
-    use_kl_loss: False
+    use_kl_loss: True
     kl_loss_coef: 0.001
     kl_loss_type: low_var_kl
     optim:
@@ -41,7 +41,7 @@ actor_rollout_ref:
       param_offload: False
       optimizer_offload: False
   rollout:
-    n: 1
+    n: 5
     name: sglang
     mode: async
     max_model_len: 15000
@@ -63,7 +63,7 @@ actor_rollout_ref:
 critic:
   model:
     use_remove_padding: True
-    enable_gradient_checkpointing: true
+    enable_gradient_checkpointing: True
     fsdp_config:
       param_offload: False
       optimizer_offload: False
