@@ -1,0 +1,90 @@
+hydra:
+  searchpath:
+    - pkg://verl.trainer.config
+
+defaults:
+  - ppo_trainer
+  - _self_
+
+# Data configuration
+data:
+  train_batch_size: 512
+  val_batch_size: 256
+  max_prompt_length: 4096
+  max_response_length: 3000
+  filter_overlong_prompts: False
+  truncation: 'error'
+  return_raw_chat: True
+
+# Algorithm configuration
+algorithm:
+  adv_estimator: gae
+  use_kl_in_reward: False
+
+# Actor, Rollout, and Reference model configuration
+actor_rollout_ref:
+  model:
+    use_remove_padding: True
+    enable_gradient_checkpointing: True
+  actor:
+    use_kl_loss: False
+    kl_loss_coef: 0.001
+    kl_loss_type: low_var_kl
+    optim:
+      lr: 1e-6
+      lr_warmup_steps_ratio: 0.285
+      lr_warmup_steps: 100
+    ppo_mini_batch_size: 256
+    ppo_micro_batch_size_per_gpu: 16
+    entropy_coeff: 0
+    fsdp_config:
+      param_offload: False
+      optimizer_offload: False
+  rollout:
+    n: 1
+    name: sglang
+    mode: async
+    max_model_len: 15000
+    log_prob_micro_batch_size_per_gpu: 128
+    tensor_model_parallel_size: 1
+    gpu_memory_utilization: 0.6
+    engine_kwargs:
+      sglang:
+        attention_backend: flashinfer
+    multi_turn:
+      format: hermes
+      enable: True
+      max_assistant_turns: 4
+      max_tool_response_length: 4096
+      tokenization_sanity_check_mode: "disable"
+  ref:
+    log_prob_micro_batch_size_per_gpu: 128
+    fsdp_config:
+      param_offload: False
+
+# Critic configuration
+critic:
+  model:
+    use_remove_padding: True
+    enable_gradient_checkpointing: true
+    fsdp_config:
+      param_offload: False
+      optimizer_offload: False
+  optim:
+    lr: 1e-5
+    lr_warmup_steps_ratio: 0.015
+    lr_warmup_steps: 15
+  forward_micro_batch_size_per_gpu: 128
+  ppo_micro_batch_size_per_gpu: 32
+
+# Trainer configuration
+trainer:
+  total_epochs: 15
+  critic_warmup: 0
+  val_before_train: False
+  logger: ["console","wandb"]
+  n_gpus_per_node: 8
+  nnodes: 1
+  save_freq: 100
+  test_freq: 100
+  resume_mode: "disable"
