@@ -123,7 +123,13 @@ bash recipe/search-r1/train_search-r1_ppo_qwen2.5-3b-instruct.sh
 # Edit the script and change: actor_rollout_ref.model.path="Qwen/Qwen3-4B-Instruct"
 ```
 
-### 4. Evaluate the Model
+### 4. Convert Checkpoints to HuggingFace Format Model
+
+```bash
+python -m verl.model_merger merge --backend fsdp --local_dir checkpoints/ferret/search-r1_qwen2.5-3b-instruct-ppo/global_step_300/actor --target_dir hf_models/Ferret_Search-R1_Qwen2.5-3b-instruct_ppo
+```
+
+### 5. Evaluate the Model
 
 ```bash
 bash recipe/search-r1/eval_search-r1.sh
